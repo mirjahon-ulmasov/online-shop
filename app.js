@@ -1,22 +1,26 @@
-import express from "express";
 import bodyParser from "body-parser";
+import express from "express";
+import path from "path"
+import { fileURLToPath } from "url";
 
-import adminRoutes from "./routes/admin.js"
-import shopRoutes from "./routes/shop.js"
+import adminRoutes from "./routes/admin.js";
+import shopRoutes from "./routes/shop.js";
+import { getNotFound } from "./controllers/error.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(adminRoutes)
-app.use(shopRoutes)
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
 
-app.use((req, res) => {
-  res.render("404", { pageTitle: "404", path: '/404'  });
-});
+app.use(getNotFound);
 
 app.listen(3000);

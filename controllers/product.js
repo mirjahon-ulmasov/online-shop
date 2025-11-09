@@ -1,14 +1,24 @@
-const products = [];
+import { Product } from "../models/product.js";
 
 export const getAddProduct = (req, res, next) => {
-  res.render("add-product", { pageTitle: "Add Product", path: "/add-product" });
+    res.render("add-product", {
+        pageTitle: "Add Product",
+        path: "/admin/add-product",
+    });
 };
 
 export const postAddProduct = (req, res, next) => {
-  products.push(req.body);
-  res.status(302).redirect("/");
+    const product = new Product(req.body.title, req.body.description)
+    product.save()
+    res.status(302).redirect("/");
 };
 
 export const getProducts = (req, res, next) => {
-    res.render('products', { pageTitle: 'Products', products, path: '/products'  })
-}
+    Product.fetchAll((products) => {
+        res.render("products", {
+            pageTitle: "Products",
+            products,
+            path: "/products",
+        });
+    })
+};
