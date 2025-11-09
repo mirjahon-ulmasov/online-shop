@@ -1,0 +1,32 @@
+
+form {
+    background: #ededed;
+    padding: 1rem;
+    width: 20rem;
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 15%;
+    border-radius: 6px;
+}
+
+input, textarea {
+    padding: 6px 8px;
+    font-size: 16px;
+    border: none;
+    border-radius: 3px;
+}
+
+button {
+    border: none;
+    color: white;
+    padding: 6px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    background-color: #7171f8;
+}
+
+button:hover {
+    background-color: #6a6af7;
+}

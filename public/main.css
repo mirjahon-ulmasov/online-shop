@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.not-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15%;
+    font-size: 24px;
+    color: #ccc;
+}
+
+.navigation {
+    height: 3rem;
+    display: flex;
+    padding-left: 1rem;
+    align-items: center;
+    background: #302f29;
+}
+
+.navigation-list {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+}
+
+.navigation-item {
+    color: white;
+}
+
+.navigation-item a {
+    text-decoration: none;
+    color: white;
+}
+
+.navigation-item a:hover,
+.navigation-item a.active {
+    color: #f3f391;
+}
+

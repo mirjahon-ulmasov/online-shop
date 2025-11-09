@@ -1,0 +1,23 @@
+<%- include('includes/head.ejs') %>
+<link rel="stylesheet" href="products.css">
+</head>
+<body>
+    <%- include('includes/navigation.ejs') %>
+    <main>
+        <% if(products.length > 0) { %>
+            <ul class="products">
+                <% for(product of products) { %>
+                    <li>
+                        <h2><%= product.title %></h2>
+                        <p><%= product.description %></p>
+                    </li>
+                <% } %>
+            </ul>
+        <% } else { %>
+            <h1 class="not-found">
+                No products yet, try add one...
+            </h1>
+        <% } %>
+    </main>
+</body>
+</html>
