@@ -25,6 +25,7 @@
     list-style: none;
     display: flex;
     gap: 8px;
+    align-items: center;
 }
 
 .navigation-item {
@@ -41,3 +42,8 @@
     color: #f3f391;
 }
 
+.divider {
+    height: 2rem;
+    width: 2px;
+    background: #ceabab;
+}

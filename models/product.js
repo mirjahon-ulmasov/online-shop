@@ -12,8 +12,9 @@ const getProductsFile = (cb) => {
 };
 
 export class Product {
-    constructor(title, desc) {
+    constructor(title, price, desc) {
         this.title = title;
+        this.price = price
         this.description = desc;
     }
 
