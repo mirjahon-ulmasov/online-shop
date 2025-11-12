@@ -12,8 +12,8 @@
                         <p class="price"><%= product.price %>$</p>
                         <p class="description"><%= product.description %></p>
                         <div class="actions">
-                            <a href="/admin/edit-product">Edit</a>
-                            <form action="/admin/delete-product" method="post">
+                            <a href="/admin/edit-product/<%= product.id %>?editing=true">Edit</a>
+                            <form action="/admin/delete-product/<%= product.id %>" method="post">
                                 <button type="submit">Delete</button>
                             </form>
                         </div>

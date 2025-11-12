@@ -1,4 +1,10 @@
-
+.balance {
+    display: flex;
+    padding: 1rem;
+    margin: 8px;
+    color: white;
+    background: #405b65;
+}
 ul.products {
     display: flex;
     flex-wrap: wrap;
@@ -21,6 +27,14 @@ ul.products li.admin {
     background: #dd9c6a;
 }
 
+.detail {
+    margin-top: 15%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
 .title {
     color: #333;
     font-size: 20px;
@@ -33,6 +47,11 @@ ul.products li.admin {
     color: #6565f4;
 }
 
+.count {
+    font-size: 16px;
+    color: #1e4338;
+}
+
 .description {
     font-size: 14px;
 }
@@ -40,6 +59,7 @@ ul.products li.admin {
 .actions {
     display: flex;
     gap: 8px;
+    justify-content: center;
 }
 
 .actions a,
@@ -52,4 +72,8 @@ ul.products li.admin {
     padding: 4px 10px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.actions button.danger {
+    background-color: #e84e4e;
 }

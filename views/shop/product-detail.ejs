@@ -1,9 +1,17 @@
 <%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/products.css">
 </head>
 <body>
     <main>
         <%- include("../includes/navigation.ejs") %>
-        <h1>Product Detail</h1>
+        <div class="detail">
+            <h2 class="title"><%= product.title %></h2>
+            <p class="price"><%= product.price %>$</p>
+            <p class="description"><%= product.description %></p>
+            <div class="actions">
+                <%- include('../includes/add-to-cart.ejs') %>
+            </div>
+        </div>
     </main>
 </body>
 </html>

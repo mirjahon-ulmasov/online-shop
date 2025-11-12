@@ -1,9 +1,32 @@
 <%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/products.css">
 </head>
 <body>
+    <%- include('../includes/navigation.ejs') %>
     <main>
-        <%- include("../includes/navigation.ejs") %>
-        <h1>Cart Page</h1>
+        <div class="balance">
+            <h1>Balance: <%= balance %></h1>
+        </div>
+        <% if(cartProducts.length > 0) { %>
+            <ul class="products">
+                <% for(product of cartProducts) { %>
+                    <li>
+                        <h2 class="title"><%= product.title %></h2>
+                        <p class="price"><%= product.price %>$</p>
+                        <p class="cart">count: <%= product.count %></p>
+                        <p class="description"><%= product.description %></p>
+                        <form class="actions" action="/delete-cart" method="post">
+                            <input type="hidden" name="id" value="<%= product.id %>">
+                            <button class="danger" type="submit">Delete</button>
+                        </form>
+                    </li>
+                <% } %>
+            </ul>
+        <% } else { %>
+            <h1 class="not-found">
+                No products yet, try add one...
+            </h1>
+        <% } %>
     </main>
 </body>
 </html>
