@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { rootDir } from "../utils/path.js";
+import { rootDir } from "../../utils/path.js";
 import { Product } from "./product.js";
 
 const p = path.join(rootDir, "data", "cart.json");

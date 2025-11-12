@@ -1,5 +1,5 @@
-import { Cart } from "../models/cart.js";
-import { Product } from "../models/product.js";
+import { Cart } from "../../models/fs/cart.js";
+import { Product } from "../../models/fs/product.js";
 
 // ----------------- Admin Pages -----------------
 export const getAddProduct = (req, res, next) => {
