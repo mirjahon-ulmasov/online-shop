@@ -1,12 +1,12 @@
 import { Router } from "express";
+import { getAddProduct } from "../controllers/sql/product.js";
 import {
     getAdminProducts,
-    getAddProduct,
     postAddProduct,
     getEditProduct,
-    postEditProduct,
+    postEdit2Product,
     postDeleteProduct,
-} from "../controllers/sql/product.js";
+} from "../controllers/sequelize/product.js";
 
 const router = Router();
 
@@ -19,7 +19,7 @@ router.get("/products", getAdminProducts);
 
 // UPDATE
 router.get("/edit-product/:productId", getEditProduct);
-router.post("/edit-product/:productId", postEditProduct);
+router.post("/edit-product/:productId", postEdit2Product);
 
 // DELETE
 router.post("/delete-product/:productId", postDeleteProduct);

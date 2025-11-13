@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getCart, postCart, deleteCart, getOrders, getCheckout } from "../controllers/fs/product.js";
-import { getIndex, getProducts, getProduct } from "../controllers/sql/product.js";
+import { getIndex, getProducts } from "../controllers/sql/product.js";
+import { getProduct } from "../controllers/sequelize/product.js";
 
 const router = Router()
 

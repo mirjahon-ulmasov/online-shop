@@ -1,4 +1,4 @@
-import db from "../../utils/database.js"
+import db from "../../utils/database_sql.js"
 
 export class Product {
     constructor(id, title, price, description) {
