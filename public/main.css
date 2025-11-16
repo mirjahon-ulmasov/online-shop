@@ -47,3 +47,12 @@
     width: 2px;
     background: #ceabab;
 }
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 6px 8px;
+    border: 1px solid #302f29;
+}

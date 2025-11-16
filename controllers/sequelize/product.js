@@ -1,10 +1,11 @@
-import Product from "../../models/sequelize/product.js";
+import { Product } from "../../models/sequelize/index.js";
 
 export const postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const price = req.body.price;
     const description = req.body.description;
-    Product.create({ title, price, description })
+    req.user
+        .createProduct({ title, price, description })
         .then(() => {
             console.log("Product saved");
             res.redirect("/admin/products");
@@ -65,16 +66,17 @@ export const postEdit2Product = (req, res, next) => {
 
 export const postDeleteProduct = (req, res, next) => {
     const productId = req.params.productId;
-    Product.destroy({ where: { id : productId }})
+    Product.destroy({ where: { id: productId } })
         .then(() => {
             console.log(`Product with ID ${productId} DELETED successfully`);
-            res.redirect('/admin/products')
+            res.redirect("/admin/products");
         })
         .catch((err) => console.log(err));
 };
 
 export const getAdminProducts = (req, res, next) => {
-    Product.findAll()
+    // Product.findAll()
+    req.user.getProducts()
         .then((products) => {
             res.render("admin/product-list", {
                 pageTitle: "Admin Products",
@@ -87,14 +89,13 @@ export const getAdminProducts = (req, res, next) => {
 
 export const getProduct = (req, res, next) => {
     const productId = req.params.productId;
-    Product.findByPk(productId)
-        .then((product) => {
-            // Product.findOne({ where: { id: productId } }).then((product) => {
-            res.render("shop/product-detail", {
-                pageTitle: "Page Detail",
-                path: "/products",
-                product,
-            });
-        })
-        .catch((err) => console.log(err));
+    // Product.findOne({ where: { id: productId } }).then((product) => {
+    Product.findByPk(productId).then((product) => {
+        res.render("shop/product-detail", {
+            pageTitle: "Page Detail",
+            path: "/products",
+            product,
+        });
+    })
+    .catch((err) => console.log(err));
 };

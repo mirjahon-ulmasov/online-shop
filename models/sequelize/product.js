@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 import sequelize from "../../utils/database_sequelize.js";
 
-const Product = sequelize.define("product", {
+export const Product = sequelize.define("product", {
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -18,5 +18,3 @@ const Product = sequelize.define("product", {
     },
     description: Sequelize.STRING,
 });
-
-export default Product;

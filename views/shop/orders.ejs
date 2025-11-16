@@ -3,7 +3,21 @@
 <body>
     <main>
         <%- include("../includes/navigation.ejs") %>
-        <h1>Orders</h1>
+        <div style="margin: 2rem">
+            <h1>Orders</h1>
+            <% if(orders.length > 0) { %>
+                <ul>
+                    <% for(let order of orders) { %>
+                        <li>
+                            <a href="/orders/<%= order.id %>">
+                                ID: <%= order.id %>
+                            </a>
+                    <% } %>
+                </ul>
+            <% } else { %>
+                No orders yet...
+            <% } %>
+        </div>
     </main>
 </body>
 </html>

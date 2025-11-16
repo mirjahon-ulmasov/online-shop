@@ -1,0 +1,33 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+    <main>
+        <%- include("../includes/navigation.ejs") %>
+        <div style="margin: 2rem">
+            <h1>Order Detail</h1>
+            <% if(products.length > 0) { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>TITLE</th>
+                            <th>PRICE</th>
+                            <th>QUANTITY</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let product of products) { %>
+                            <tr>
+                                <td><%= product.title %></td>
+                                <td>$<%= product.price %></td>
+                                <td><%= product.orderItem.quantity %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                No products
+            <% } %>
+        </div>
+    </main>
+</body>
+</html>
