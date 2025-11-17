@@ -13,10 +13,10 @@
                     <li>
                         <h2 class="title"><%= product.title %></h2>
                         <p class="price"><%= product.price %>$</p>
-                        <p class="cart">count: <%= product.cartItem.quantity %></p>
+                        <p class="cart">count: <%= product.quantity %></p>
                         <p class="description"><%= product.description %></p>
                         <form class="actions" action="/delete-cart" method="post">
-                            <input type="hidden" name="id" value="<%= product.id %>">
+                            <input type="hidden" name="id" value="<%= product._id %>">
                             <button class="danger" type="submit">Delete</button>
                         </form>
                     </li>

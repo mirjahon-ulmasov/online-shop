@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getIndex, getProduct, getProducts } from "../controllers/nosql/product.js";
+import { getCart, postCart, deleteCart } from "../controllers/nosql/cart.js";
 
 const router = Router()
 
@@ -9,11 +10,11 @@ router.get("/products", getProducts);
 
 router.get("/products/:productId", getProduct);
 
-// router.get("/cart", getCart);
+router.get("/cart", getCart);
 
-// router.post("/cart", postCart);
+router.post("/cart", postCart);
 
-// router.post('/delete-cart', deleteCart)
+router.post('/delete-cart', deleteCart)
 
 // router.get("/orders", getOrders);
 

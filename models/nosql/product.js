@@ -3,7 +3,7 @@ import { connectDB } from "../../utils/database_nosql.js";
 
 export class Product {
     constructor(id, title, price, description) {
-        this.id = id
+        this._id = new ObjectId(id)
         this.title = title;
         this.price = price;
         this.description = description;
@@ -17,7 +17,7 @@ export class Product {
     async update() {
         const db = await connectDB();
         return db.collection('products').updateOne(
-            { _id: new ObjectId(this.id) },
+            { _id: this._id },
             { $set: this }
         )
     }
