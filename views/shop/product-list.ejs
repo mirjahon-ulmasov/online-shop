@@ -12,7 +12,7 @@
                         <p class="price"><%= product.price %>$</p>
                         <p class="description"><%= product.description %></p>
                         <div class="actions">
-                            <a href="/products/<%= product.id %>">Detail</a>
+                            <a href="/products/<%= product._id %>">Detail</a>
                             <%- include('../includes/add-to-cart.ejs') %>
                         </div>
                     </li>

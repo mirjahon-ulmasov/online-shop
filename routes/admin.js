@@ -2,12 +2,11 @@ import { Router } from "express";
 import { getAddProduct } from "../controllers/sql/product.js";
 import {
     getAdminProducts,
-    postAddProduct,
     getEditProduct,
-    postEdit2Product,
+    postAddProduct,
     postDeleteProduct,
-} from "../controllers/sequelize/product.js";
-
+    postEditProduct,
+} from "../controllers/nosql/product.js";
 const router = Router();
 
 // CREATE
@@ -19,7 +18,7 @@ router.get("/products", getAdminProducts);
 
 // UPDATE
 router.get("/edit-product/:productId", getEditProduct);
-router.post("/edit-product/:productId", postEdit2Product);
+router.post("/edit-product/:productId", postEditProduct);
 
 // DELETE
 router.post("/delete-product/:productId", postDeleteProduct);

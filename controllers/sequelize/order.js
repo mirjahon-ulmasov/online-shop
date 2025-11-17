@@ -26,9 +26,9 @@ export const getOrder = (req, res, next) => {
 
 export const postAddOrder = async (req, res, next) => {
     try {
-        const order = await req.user.createOrder();
         const cart = await req.user.getCart();
         const products = await cart.getProducts();
+        const order = await req.user.createOrder();
         await order.addProducts(
             products.map((product) => {
                 product.orderItem = { quantity: product.cartItem.quantity };

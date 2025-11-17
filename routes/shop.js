@@ -1,10 +1,5 @@
 import { Router } from "express";
-import { getCheckout } from "../controllers/fs/product.js";
-import { getIndex, getProducts } from "../controllers/sql/product.js";
-
-import { getProduct } from "../controllers/sequelize/product.js";
-import { getCart, postCart, deleteCart } from "../controllers/sequelize/cart.js";
-import { getOrder, getOrders, postAddOrder } from "../controllers/sequelize/order.js"
+import { getIndex, getProduct, getProducts } from "../controllers/nosql/product.js";
 
 const router = Router()
 
@@ -14,19 +9,17 @@ router.get("/products", getProducts);
 
 router.get("/products/:productId", getProduct);
 
-router.get("/cart", getCart);
+// router.get("/cart", getCart);
 
-router.post("/cart", postCart);
+// router.post("/cart", postCart);
 
-router.post('/delete-cart', deleteCart)
+// router.post('/delete-cart', deleteCart)
 
-router.get("/orders", getOrders);
+// router.get("/orders", getOrders);
 
-router.get("/orders/:orderId", getOrder);
+// router.get("/orders/:orderId", getOrder);
 
-router.post("/order", postAddOrder);
-
-router.get("/checkout", getCheckout);
+// router.post("/order", postAddOrder);
 
 // router.post('/add-to-cart')
 
