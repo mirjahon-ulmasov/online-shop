@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { getAddProduct } from "../controllers/sql/product.js";
 import {
     getAdminProducts,
-    getEditProduct,
+    getAddProduct,
     postAddProduct,
-    postDeleteProduct,
+    getEditProduct,
     postEditProduct,
-} from "../controllers/nosql/product.js";
+    postDeleteProduct,
+} from "../controllers/mongoose/product.js";
 const router = Router();
 
 // CREATE

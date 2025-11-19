@@ -101,7 +101,7 @@ export const getIndex = async (req, res, next) => {
         const products = await Product.fetchAll();
         res.render("shop/index", {
             pageTitle: "Shop",
-            path: "/shop",
+            path: "/",
             products,
         });
     } catch (err) {

@@ -70,6 +70,45 @@ export class User {
         return { cartProducts, balance };
     }
 
+    async createOrder() {
+        const db = await connectDB();
+        await db
+            .collection("orders")
+            .insertOne({ ...this.cart, userId: this._id });
+        this.cart = { items: [] };
+        return db
+            .collection("users")
+            .updateOne({ _id: this._id }, { $set: { cart: this.cart } });
+    }
+
+    async getOrders() {
+        const db = await connectDB();
+        return db.collection("orders").find({ userId: this._id }).toArray();
+    }
+
+    async getOrderById(orderId) {
+        const db = await connectDB();
+        const order = await db
+            .collection("orders")
+            .findOne({ _id: new ObjectId(orderId) });
+
+        const prodMap = new Map();
+        for (const item of order.items) {
+            prodMap.set(item.productId.toString(), item.quantity);
+        }
+        const prodIds = order.items.map((item) => item.productId);
+        const products = await db
+            .collection("products")
+            .find({ _id: { $in: prodIds } }).toArray();
+
+        const updadetProducts = products.map((product) => {
+            product.quantity = prodMap.get(product._id.toString());
+            return product
+        });
+
+        return updadetProducts
+    }
+
     static async findById(id) {
         const db = await connectDB();
         return db.collection("users").findOne({ _id: new ObjectId(id) });

@@ -1,0 +1,19 @@
+
+.order {
+    list-style: none;
+}
+.order > li {
+    padding: 1rem;
+    margin-top: 2rem;
+    box-shadow: 1px 1px 10px #ccc;
+    border: 1px solid #ccc;
+}
+
+.order-product {
+    list-style: none;
+}
+.order-product li {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    margin-top: 1rem;
+}
