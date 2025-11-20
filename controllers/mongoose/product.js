@@ -5,6 +5,7 @@ export const getAddProduct = (req, res, next) => {
         pageTitle: "Add Product",
         path: "/admin/add-product",
         editing: false,
+        isAuthenticated: req.session.isLoggedIn,
     });
 };
 
@@ -35,6 +36,7 @@ export const getAdminProducts = async (req, res, next) => {
             pageTitle: "Admin Products",
             path: "/admin/products",
             products,
+            isAuthenticated: req.session.isLoggedIn,
         });
     } catch (err) {
         console.log(err);
@@ -50,6 +52,7 @@ export const getEditProduct = async (req, res, next) => {
             path: "/admin/edit-product",
             editing: true,
             product,
+            isAuthenticated: req.session.isLoggedIn,
         });
     } catch (err) {
         console.log(err);
@@ -94,8 +97,38 @@ export const getProduct = async (req, res, next) => {
             pageTitle: "Product Detail",
             path: "products",
             product,
+            isAuthenticated: req.session.isLoggedIn,
         });
     } catch (err) {
         console.log(err);
     }
 };
+
+
+export const getIndex = async (req, res, next) => {
+    try {
+        const products = await Product.find()
+        res.render('shop/index', {
+            pageTitle: 'Shop',
+            path: '/',
+            products,
+            isAuthenticated: req.session.isLoggedIn
+        })
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+export const getProducts = async (req, res, next) => {
+    try {
+        const products = await Product.find()
+        res.render('shop/product-list', {
+            pageTitle: 'Products',
+            path: '/products',
+            products,
+            isAuthenticated: req.session.isLoggedIn
+        })
+    } catch(err) {
+        console.log(err);
+    }
+}

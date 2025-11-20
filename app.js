@@ -3,6 +3,8 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import { connect } from "mongoose";
+import session from "express-session";
+import MongoDBSession from "connect-mongodb-session";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -16,6 +18,13 @@ import { User } from "./models/mongoose/user.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const MongoDBStore = MongoDBSession(session);
+const store = new MongoDBStore({
+    uri: process.env.MONGO_URI,
+    databaseName: "online-shop",
+    collection: "sessions",
+});
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -24,13 +33,32 @@ app.set("views", "views");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(
+    session({
+        secret: "my first node app in 2025",
+        resave: false,
+        saveUninitialized: false,
+        store,
+        cookie: {
+            secure: false, // change to true when uses https
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60, // 1hour TTL (Time To Live)
+        },
+    })
+);
+
 app.use(async (req, res, next) => {
     try {
-        const user = await User.findById("691d8c15a09e69fa2ed8db2c");
-        req.user = user;
+        if (req.session.user) {
+            const user = await User.findById(req.session.user._id);
+            req.user = user;
+        } else {
+            req.user = null;
+        }
         next();
     } catch (err) {
         console.log(err);
+        next(err);
     }
 });
 

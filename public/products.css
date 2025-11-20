@@ -26,6 +26,9 @@ ul.products li {
 ul.products li.admin {
     background: #dd9c6a;
 }
+ul.products li.shop {
+    background: #dcd7ff;
+}
 
 .detail {
     margin-top: 15%;

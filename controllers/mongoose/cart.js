@@ -25,6 +25,7 @@ export const getCart = async (req, res, next) => {
             path: "/cart",
             cartProducts,
             balance,
+            isAuthenticated: req.session.isLoggedIn,
         });
     } catch (err) {
         console.log(err);
