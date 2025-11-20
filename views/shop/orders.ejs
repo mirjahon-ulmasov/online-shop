@@ -16,8 +16,8 @@
                             <ul class="order-product">
                                 <% for(let product of order.products) { %>
                                     <li>
-                                        <h3><%= product.productId.title %>(<%= product.quantity %>)</h3>
-                                        <h4><%= product.productId.price %>$</h4>
+                                        <h3><%= product.productId?.title %>(<%= product.quantity %>)</h3>
+                                        <h4><%= product.productId?.price %>$</h4>
                                     </li>
                                 <% } %>
                             </ul>

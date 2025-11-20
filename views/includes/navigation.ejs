@@ -39,6 +39,7 @@
                 <% if (isAuthenticated) { %>
                     <li class="navigation-item">
                         <form action="/logout" method="post">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button class="nav-btn" type="submit">Logout</button>
                         </form>
                     </li>
@@ -46,6 +47,11 @@
                     <li class="navigation-item">
                         <a href="/login" class="<%= path == '/login' ? 'active' : '' %>">
                             Login
+                        </a>
+                    </li>
+                    <li class="navigation-item">
+                        <a href="/signup" class="<%= path == '/signup' ? 'active' : '' %>">
+                            Sign Up
                         </a>
                     </li>
                 <% } %>

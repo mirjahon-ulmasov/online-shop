@@ -5,6 +5,8 @@ import { fileURLToPath } from "url";
 import { connect } from "mongoose";
 import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
+import cookieParser from "cookie-parser";
+import { doubleCsrf } from "csrf-csrf"
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -25,6 +27,12 @@ const store = new MongoDBStore({
     collection: "sessions",
 });
 
+export const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf({
+    getSecret: () => process.env.CSRF_SECRET || "supersecretkey",
+    cookieName: "__Host-psifi.x-csrf-token",
+    getSessionIdentifier: (req) => req.session.id,
+});
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -32,6 +40,8 @@ app.set("views", "views");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cookieParser());
 
 app.use(
     session({
@@ -62,6 +72,15 @@ app.use(async (req, res, next) => {
     }
 });
 
+app.use((req, res, next) => {
+    // These get added in each ejs files
+    res.locals.csrfToken = generateCsrfToken(req, res);
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    next();
+});
+
+app.use(doubleCsrfProtection);
+
 app.use("/admin", adminRoutes);
 app.use(authRoutes);
 app.use(shopRoutes);
@@ -71,15 +90,6 @@ app.use(getNotFound);
 async function createServer() {
     try {
         await connect(process.env.MONGO_URI, { dbName: "online-shop" });
-        const user = await User.findOne();
-        if (!user) {
-            const user = new User({
-                name: "Mirjahon Ulmasov",
-                email: "mirjahonulmasov@gmail.com",
-                cart: { items: [] },
-            });
-            await user.save();
-        }
         app.listen(3000);
     } catch (err) {
         console.error("Failed to start server", err);

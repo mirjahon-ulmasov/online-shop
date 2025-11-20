@@ -18,7 +18,6 @@ export const getOrders = async (req, res, next) => {
             pageTitle: "Orders",
             path: "/orders",
             orders,
-            isAuthenticated: req.session.isLoggedIn,
         });
     } catch (err) {
         console.log(err);
@@ -27,23 +26,25 @@ export const getOrders = async (req, res, next) => {
 
 export const getOrder = async (req, res, next) => {
     try {
-        const orderId = req.params.orderId
-        const order = await Order.findById(orderId).populate('products.productId userId')
-        
-        const products = order.products.map(prod => {
+        const orderId = req.params.orderId;
+        const order = await Order.findById(orderId).populate(
+            "products.productId userId"
+        );
+
+        const products = order.products.map((prod) => {
             return {
                 ...prod.productId._doc,
-                quantity: prod.quantity
-            }
-        })
-        
-        res.render('shop/order-detail', {
-            pageTitle: 'Order Detail',
-            path: '/orders',
+                quantity: prod.quantity,
+            };
+        });
+
+        res.render("shop/order-detail", {
+            pageTitle: "Order Detail",
+            path: "/orders",
             products,
-            isAuthenticated: req.session.isLoggedIn 
-        })
-    } catch(err) {
+            isAuthenticated: req.session.isLoggedIn,
+        });
+    } catch (err) {
         console.log(err);
     }
-}
+};

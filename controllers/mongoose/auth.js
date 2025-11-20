@@ -1,19 +1,27 @@
 import { User } from "../../models/mongoose/user.js";
+import bcrypt from "bcryptjs";
 
 export const getLogin = (req, res, next) => {
     res.render("auth/login", {
         pageTitle: "Login",
         path: "/login",
-        isAuthenticated: req.session.isLoggedIn,
     });
 };
 
 export const postLogin = async (req, res, next) => {
     try {
-        const user = await User.findById("691d8c15a09e69fa2ed8db2c");
+        const email = req.body.email;
+        const password = req.body.password;
+
+        const user = await User.findOne({ email });
+        if (!user) return res.redirect("/login");
+
+        const doMatch = await bcrypt.compare(password, user.password);
+        if (!doMatch) return res.redirect("/login");
+
         req.session.user = user;
         req.session.isLoggedIn = true;
-        res.session.save((err) => {
+        req.session.save((err) => {
             console.log(err);
             res.redirect("/");
         });
@@ -27,4 +35,33 @@ export const postLogout = (req, res, next) => {
         console.log(err);
         res.redirect("/login");
     });
+};
+
+export const getSignup = (req, res, next) => {
+    res.render("auth/signup", {
+        pageTitle: "Sign Up",
+        path: "/signup",
+    });
+};
+
+export const postSignup = async (req, res, next) => {
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+        const confirmPassword = req.body.confirmPassword;
+        const foundUser = await User.findOne({ email });
+        if (foundUser) {
+            return res.redirect("/signup");
+        }
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const user = new User({
+            email,
+            password: hashedPassword,
+            cart: { items: [] },
+        });
+        await user.save();
+        res.redirect("/login");
+    } catch (err) {
+        console.log(err);
+    }
 };
