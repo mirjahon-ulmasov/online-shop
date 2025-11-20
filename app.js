@@ -6,7 +6,7 @@ import { connect } from "mongoose";
 import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
 import cookieParser from "cookie-parser";
-import { doubleCsrf } from "csrf-csrf"
+import { doubleCsrf } from "csrf-csrf";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -27,9 +27,9 @@ const store = new MongoDBStore({
     collection: "sessions",
 });
 
-export const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf({
+const { doubleCsrfProtection, generateToken } = doubleCsrf({
     getSecret: () => process.env.CSRF_SECRET || "supersecretkey",
-    cookieName: "__Host-psifi.x-csrf-token",
+    cookieName: "x-csrf-token",
     getSessionIdentifier: (req) => req.session.id,
 });
 
@@ -74,7 +74,7 @@ app.use(async (req, res, next) => {
 
 app.use((req, res, next) => {
     // These get added in each ejs files
-    res.locals.csrfToken = generateCsrfToken(req, res);
+    res.locals.csrfToken = generateToken(req, res);
     res.locals.isAuthenticated = req.session.isLoggedIn;
     next();
 });
