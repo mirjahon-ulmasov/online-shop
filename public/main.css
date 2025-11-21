@@ -63,3 +63,19 @@ th {
     padding: 6px 8px;
     border: 1px solid #302f29;
 }
+
+
+ul.error-list {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+}
+
+li.error-item {
+    padding: 4px 8px;
+    color: #ac3131;
+    background: #f6dbdb;
+    border-radius: 4px;
+    border: 1px solid #ac3131;
+}
