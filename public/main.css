@@ -64,8 +64,7 @@ th {
     border: 1px solid #302f29;
 }
 
-
-ul.error-list {
+ul.message-list {
     list-style: none;
     display: flex;
     gap: 8px;
@@ -78,4 +77,12 @@ li.error-item {
     background: #f6dbdb;
     border-radius: 4px;
     border: 1px solid #ac3131;
+}
+
+li.success-item {
+    padding: 4px 8px;
+    color: #1f723d;
+    background: #dbf6dd;
+    border-radius: 4px;
+    border: 1px solid #1f723d;
 }

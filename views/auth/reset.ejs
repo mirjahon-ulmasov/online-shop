@@ -4,14 +4,12 @@
 <body>
     <main>
         <%- include("../includes/navigation.ejs") %>
-        <form class="form" action="/login" method="POST">
+        <form class="form" action="/reset" method="POST">
             <input type="text" placeholder="Email" name="email">
-            <input type="password" placeholder="Password" name="password">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <button type="submit">Login</button>
+            <button type="submit">Reset Password</button>
             <%- include('../includes/error-messages.ejs') %>
             <%- include('../includes/success-messages.ejs') %>
-            <a href="/reset" style="text-align: center;"">Forgot password</a>
         </form>
     </main>
 </body>

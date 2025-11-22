@@ -1,0 +1,7 @@
+<% if (errorMessages.length > 0) { %>
+    <ul class="message-list">
+        <% for(let error of errorMessages) { %>
+        <li class="error-item"><%= error %></li>
+        <% } %>
+    </ul>
+<% } %>

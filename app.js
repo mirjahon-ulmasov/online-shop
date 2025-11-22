@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config({ quiet: true });
+
 import bodyParser from "body-parser";
 import express from "express";
 import path from "path";
@@ -6,10 +9,7 @@ import { connect } from "mongoose";
 import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
 import { csrfSync } from "csrf-sync";
-import flash from "connect-flash"
-
-import dotenv from "dotenv";
-dotenv.config({ quiet: true });
+import flash from "connect-flash";
 
 import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
@@ -28,7 +28,7 @@ const store = new MongoDBStore({
 });
 
 const { generateToken, csrfSynchronisedProtection } = csrfSync({
-    getTokenFromRequest: (req) => req.body["_csrf"]
+    getTokenFromRequest: (req) => req.body["_csrf"],
 });
 
 const app = express();
@@ -68,13 +68,19 @@ app.use(async (req, res, next) => {
     }
 });
 
-app.use(csrfSynchronisedProtection)
-app.use(flash())
+app.use(csrfSynchronisedProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
     // These get added in each ejs files
     res.locals.csrfToken = generateToken(req);
     res.locals.isAuthenticated = req.session.isLoggedIn;
+    next();
+});
+
+app.use((req, res, next) => {
+    res.locals.errorMessages = req.flash("error");
+    res.locals.successMessages = req.flash("success");
     next();
 });
 
@@ -87,7 +93,7 @@ app.use(getNotFound);
 async function createServer() {
     try {
         await connect(process.env.MONGO_URI, { dbName: "online-shop" });
-        console.log('Connected to MongoDB');
+        console.log("Connected to MongoDB");
         app.listen(3000);
     } catch (err) {
         console.error("Failed to start server", err);

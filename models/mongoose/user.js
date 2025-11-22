@@ -10,6 +10,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    reset: {
+        token: String,
+        expireDate: Date
+    },
     cart: {
         items: [
             {

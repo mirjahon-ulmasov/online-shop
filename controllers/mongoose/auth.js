@@ -1,11 +1,12 @@
-import { User } from "../../models/mongoose/user.js";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import { User } from "../../models/mongoose/user.js";
+import { sendEmail } from "../../utils/email.js";
 
 export const getLogin = (req, res, next) => {
     res.render("auth/login", {
         pageTitle: "Login",
         path: "/login",
-        errorMessages: req.flash("error"),
     });
 };
 
@@ -47,7 +48,6 @@ export const getSignup = (req, res, next) => {
     res.render("auth/signup", {
         pageTitle: "Sign Up",
         path: "/signup",
-        errorMessages: req.flash("error"),
     });
 };
 
@@ -75,10 +75,88 @@ export const postSignup = async (req, res, next) => {
             cart: { items: [] },
         });
         await user.save();
-
+        req.flash('success', 'You successfully signed up')
         res.redirect("/login");
+        sendEmail(
+            email,
+            "Welcome to Online Shop",
+            "<h2>Welcome!</h2><p>Thank you for signing up. Your account has been successfully created.</p><p>You can now log in and start using our service.</p>"
+        );
     } catch (err) {
         console.error("Signup Error:", err);
         next(err);
+    }
+};
+
+export const getResetPassword = (req, res, next) => {
+    res.render("auth/reset", {
+        pageTitle: "Reset Password",
+        path: "/reset-password",
+    });
+};
+
+export const postResetPassword = async (req, res, next) => {
+    try {
+        const email = req.body.email;
+        const user = await User.findOne({ email });
+        if (!user) {
+            req.flash("error", "User not found with this email");
+            return res.redirect("/reset");
+        }
+        const token = crypto.randomBytes(32).toString("hex");
+        user.reset = {
+            token,
+            expireDate: new Date(Date.now() + 1000 * 60 * 60),
+        };
+        await user.save();
+        req.flash("success", "Reset link was sent to your email");
+        res.redirect("/login");
+        sendEmail(
+            email,
+            "Reset Password",
+            `<p>Please click to this <a href='http://localhost:3000/reset/${token}'>link</a> to reset your password</p>`
+        );
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const getNewPassword = async (req, res, next) => {
+    try {
+        const token = req.params.token;
+        const user = await User.findOne({
+            "reset.token": token,
+            "reset.expireDate": { $gt: new Date() },
+        });
+
+        if (!user) {
+            return res.redirect("/");
+        }
+
+        res.render("auth/new-password", {
+            pageTitle: "New Password",
+            path: "/new-password",
+            userId: user._id,
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const postNewPassword = async (req, res, next) => {
+    try {
+        const userId = req.body.userId;
+        const password = req.body.password;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.redirect("/");
+        }
+        const newPassword = await bcrypt.hash(password, 12);
+        user.password = newPassword;
+        await user.save();
+        req.flash("success", "Your password successfully changed");
+        res.redirect("/login");
+    } catch (err) {
+        console.log(err);
     }
 };
