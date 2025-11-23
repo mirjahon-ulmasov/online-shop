@@ -10,6 +10,8 @@ import {
     getNewPassword,
     postNewPassword
 } from "../controllers/mongoose/auth.js";
+import { signUpValidators } from "../validators/sign-up.js";
+import { handleValidation } from "../middlewares/handle-validation.js";
 
 const router = Router();
 
@@ -19,7 +21,7 @@ router.post("/login", postLogin);
 
 router.get("/signup", getSignup);
 
-router.post("/signup", postSignup);
+router.post("/signup", signUpValidators, handleValidation, postSignup);
 
 router.post("/logout", postLogout);
 

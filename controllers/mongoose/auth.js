@@ -48,6 +48,8 @@ export const getSignup = (req, res, next) => {
     res.render("auth/signup", {
         pageTitle: "Sign Up",
         path: "/signup",
+        errors: [],
+        oldInputs: {}
     });
 };
 
@@ -55,17 +57,15 @@ export const postSignup = async (req, res, next) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-        const confirmPassword = req.body.confirmPassword;
 
-        if (password.trim() !== confirmPassword.trim()) {
-            req.flash("error", "Password and confirmation do not match.");
-            return res.redirect("/signup");
-        }
-
-        const foundUser = await User.findOne({ email });
-        if (foundUser) {
-            req.flash("error", "User with this email already exists.");
-            return res.redirect("/signup");
+        if (res.locals.validationErrors) {
+            return res.render("auth/signup", {
+                pageTitle: "Sign Up",
+                path: "/signup",
+                errorMessages: res.locals.validationErrors.map((error) => error.msg),
+                errors: res.locals.validationErrors,
+                oldInputs: req.body,
+            });
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -75,7 +75,7 @@ export const postSignup = async (req, res, next) => {
             cart: { items: [] },
         });
         await user.save();
-        req.flash('success', 'You successfully signed up')
+        req.flash("success", "You successfully signed up");
         res.redirect("/login");
         sendEmail(
             email,
@@ -137,6 +137,7 @@ export const getNewPassword = async (req, res, next) => {
             pageTitle: "New Password",
             path: "/new-password",
             userId: user._id,
+            resetToken: token,
         });
     } catch (err) {
         console.log(err);
@@ -146,14 +147,23 @@ export const getNewPassword = async (req, res, next) => {
 export const postNewPassword = async (req, res, next) => {
     try {
         const userId = req.body.userId;
+        const resetToken = req.body.resetToken;
         const password = req.body.password;
-        const user = await User.findById(userId);
+
+        const user = await User.findOne({
+            "reset.token": resetToken,
+            "reset.expireDate": { $gt: new Date() },
+            _id: userId,
+        });
+
         if (!user) {
             return res.redirect("/");
         }
         const newPassword = await bcrypt.hash(password, 12);
         user.password = newPassword;
+        user.reset = undefined;
         await user.save();
+
         req.flash("success", "Your password successfully changed");
         res.redirect("/login");
     } catch (err) {

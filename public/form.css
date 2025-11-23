@@ -18,6 +18,10 @@ input, textarea {
     border-radius: 3px;
 }
 
+form.form .invalid {
+    border-color: #ca4444;
+}
+
 button {
     border: none;
     color: white;

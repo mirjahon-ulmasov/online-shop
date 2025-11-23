@@ -1,18 +1,35 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/form.css">
-</head>
-<body>
-    <main>
-        <%- include("../includes/navigation.ejs") %>
-        <form class="form" action="/signup" method="POST">
-            <input type="text" placeholder="Email" name="email">
-            <input type="password" placeholder="Password" name="password">
-            <input type="password" placeholder="Confirm Password" name="confirmPassword">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <button type="submit">Sign Up</button>
-            <%- include('../includes/error-messages.ejs') %>
-            <%- include('../includes/success-messages.ejs') %>
-        </form>
-    </main>
-</body>
-</html>
+    </head>
+
+    <body>
+        <main>
+            <%- include("../includes/navigation.ejs") %>
+                <form class="form" action="/signup" method="POST" autocomplete="off">
+                    <input 
+                        type="text" 
+                        placeholder="Email" 
+                        name="email" 
+                        value="<%= oldInputs?.email %>"
+                        class="<%= errors.some(error => error.path == 'email') ? 'invalid' : '' %>">
+                    <input 
+                        type="password" 
+                        placeholder="Password" 
+                        name="password" 
+                        value=""
+                        class="<%= errors.some(error => error.path == 'password') ? 'invalid' : '' %>">
+                    <input 
+                        type="password"
+                        placeholder="Confirm Password"
+                        name="confirmPassword"
+                        value=""
+                        class="<%= errors.some(error => error.path == 'confirmPassword') ? 'invalid' : '' %>">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit">Sign Up</button>
+                    <%- include('../includes/error-messages.ejs') %>
+                    <%- include('../includes/success-messages.ejs') %>
+                </form>
+        </main>
+    </body>
+
+    </html>

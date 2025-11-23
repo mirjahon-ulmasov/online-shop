@@ -64,12 +64,16 @@ export const postEditProduct = async (req, res, next) => {
         const price = req.body.price;
         const description = req.body.description;
 
-        const product = await Product.findById(prodId);
-        product.title = title;
-        product.price = price;
-        product.description = description;
-
-        await product.save();
+        const product = await Product.findOne({
+            _id: prodId,
+            userId: req.user,
+        });
+        if (product) {
+            product.title = title;
+            product.price = price;
+            product.description = description;
+            await product.save();
+        }
         res.redirect("/admin/products");
     } catch (err) {
         console.log(err);
@@ -79,7 +83,7 @@ export const postEditProduct = async (req, res, next) => {
 export const postDeleteProduct = async (req, res, next) => {
     try {
         const productId = req.params.productId;
-        await Product.findByIdAndDelete(productId);
+        await Product.deleteOne({ _id: productId, userId: req.user });
         res.redirect("/admin/products");
     } catch (err) {
         console.log(err);
