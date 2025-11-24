@@ -7,26 +7,25 @@ export const getLogin = (req, res, next) => {
     res.render("auth/login", {
         pageTitle: "Login",
         path: "/login",
+        errors: [],
+        oldInputs: {}
     });
 };
 
 export const postLogin = async (req, res, next) => {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
-
-        const user = await User.findOne({ email });
-        if (!user) {
-            req.flash("error", "User is not found");
-            return res.redirect("/login");
+        if (res.locals.validationErrors) {
+            console.log(res.locals.validationErrors);
+            
+            return res.status(422).render("auth/login", {
+                pageTitle: "Login",
+                path: "/login",
+                errors: res.locals.validationErrors,
+                oldInputs: req.body
+            });
         }
 
-        const doMatch = await bcrypt.compare(password, user.password);
-        if (!doMatch) {
-            req.flash("error", "Password is wrong.");
-            return res.redirect("/login");
-        }
-
+        const user = await User.findOne({ email: req.body.email })
         req.session.user = user;
         req.session.isLoggedIn = true;
         req.session.save((err) => {
@@ -49,7 +48,7 @@ export const getSignup = (req, res, next) => {
         pageTitle: "Sign Up",
         path: "/signup",
         errors: [],
-        oldInputs: {}
+        oldInputs: {},
     });
 };
 
@@ -59,10 +58,9 @@ export const postSignup = async (req, res, next) => {
         const password = req.body.password;
 
         if (res.locals.validationErrors) {
-            return res.render("auth/signup", {
+            return res.status(422).render("auth/signup", {
                 pageTitle: "Sign Up",
                 path: "/signup",
-                errorMessages: res.locals.validationErrors.map((error) => error.msg),
                 errors: res.locals.validationErrors,
                 oldInputs: req.body,
             });
@@ -92,6 +90,7 @@ export const getResetPassword = (req, res, next) => {
     res.render("auth/reset", {
         pageTitle: "Reset Password",
         path: "/reset-password",
+        errors: []
     });
 };
 
@@ -138,6 +137,7 @@ export const getNewPassword = async (req, res, next) => {
             path: "/new-password",
             userId: user._id,
             resetToken: token,
+            errors: []
         });
     } catch (err) {
         console.log(err);

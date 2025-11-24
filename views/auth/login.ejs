@@ -1,16 +1,24 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/form.css">
 </head>
-<body>
-    <main>
-        <%- include("../includes/navigation.ejs") %>
+<%- include('../includes/body.ejs') %>
         <form class="form" action="/login" method="POST">
-            <input type="text" placeholder="Email" name="email">
-            <input type="password" placeholder="Password" name="password">
+            <input 
+                type="text" 
+                placeholder="Email" 
+                name="email" 
+                class="<%= errors.some((error) => error.path == 'email') ? 'invalid' : '' %>"
+                value="<%= oldInputs?.email %>"
+            >
+            <input 
+                type="password" 
+                placeholder="Password" 
+                name="password"
+                class="<%= errors.some((error) => error.path == 'password') ? 'invalid' : '' %>"
+            >
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button type="submit">Login</button>
-            <%- include('../includes/error-messages.ejs') %>
-            <%- include('../includes/success-messages.ejs') %>
+            <%- include('../includes/validation-errors.ejs') %>
             <a href="/reset" style="text-align: center;"">Forgot password</a>
         </form>
     </main>

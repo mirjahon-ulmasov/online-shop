@@ -3,8 +3,11 @@ import { User } from "../models/mongoose/user.js";
 
 export const signUpValidators = [
     body("email")
+        .trim()
         .isEmail()
-        .withMessage("Please provide real email")
+        .withMessage("Please enter a valid email address")
+        .bail()
+        .normalizeEmail()
         .custom(async (value) => {
             const user = await User.findOne({ email: value });
             if (user) {
@@ -13,14 +16,17 @@ export const signUpValidators = [
             return true;
         }),
     body("password")
+        .trim()
         .isStrongPassword()
         .withMessage(
             "Password must have min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 symbol."
         ),
-    body("confirmPassword").custom((value, { req }) => {
-        if (value !== req.body.password) {
-            throw new Error("Password and confirmation do not match.");
-        }
-        return true;
-    }),
+    body("confirmPassword")
+        .trim()
+        .custom((value, { req }) => {
+            if (value !== req.body.password) {
+                throw new Error("Password and confirmation do not match.");
+            }
+            return true;
+        }),
 ];

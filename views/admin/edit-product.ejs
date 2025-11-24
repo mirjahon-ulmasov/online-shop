@@ -1,15 +1,34 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/form.css">
 </head>
-<body>
-    <%- include('../includes/navigation.ejs') %>
-    <main>
+<%- include('../includes/body.ejs') %>
         <form class="form" action="<%= editing ? '/admin/edit-product/' + product._id : '/admin/add-product' %>" method="POST">
-            <input type="text" name="title" value="<%= editing ? product.title : '' %>" placeholder="Title">
-            <input type="number" name="price" step="0.01" value="<%= editing ? product.price : '' %>" placeholder="Price">
-            <textarea rows="4" name="description" placeholder="Description"><%= editing ? product.description : '' %></textarea>
+            <input 
+                type="text" 
+                name="title" 
+                placeholder="Title"
+                value="<%= product?.title %>"
+                class="<%= errors.some(error => error.path == 'title') ? 'invalid' : '' %>"
+            >
+            <input 
+                type="number" 
+                name="price" 
+                step="0.01" 
+                placeholder="Price"
+                value="<%= product?.price %>" 
+                class="<%= errors.some(error => error.path == 'price') ? 'invalid' : '' %>"
+            >
+            <textarea 
+                rows="4" 
+                name="description" 
+                placeholder="Description"
+                class="<%= errors.some(error => error.path == 'description') ? 'invalid' : '' %>"
+            >
+                <%= product?.description %>
+            </textarea>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button type="submit"><%= editing ? 'Edit' : 'Add' %> Product</button>
+            <%- include('../includes/validation-errors.ejs') %>
         </form>
     </main>
 </body>

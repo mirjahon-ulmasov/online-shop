@@ -19,7 +19,8 @@ input, textarea {
 }
 
 form.form .invalid {
-    border-color: #ca4444;
+    border: 1px solid #ca4444;
+    background: #eddede;
 }
 
 button {

@@ -1,31 +1,5 @@
 import { Product } from "../../models/mongoose/product.js";
 
-export const getAddProduct = (req, res, next) => {
-    res.render("admin/edit-product", {
-        pageTitle: "Add Product",
-        path: "/admin/add-product",
-        editing: false,
-    });
-};
-
-export const postAddProduct = async (req, res, next) => {
-    try {
-        const title = req.body.title;
-        const price = req.body.price;
-        const description = req.body.description;
-        const product = new Product({
-            title,
-            price,
-            description,
-            userId: req.user,
-        });
-        await product.save();
-        res.redirect("/admin/products");
-    } catch (err) {
-        console.log(err);
-    }
-};
-
 export const getAdminProducts = async (req, res, next) => {
     try {
         const products = await Product.find({ userId: req.user });
@@ -42,6 +16,45 @@ export const getAdminProducts = async (req, res, next) => {
     }
 };
 
+export const getAddProduct = (req, res, next) => {
+    res.render("admin/edit-product", {
+        pageTitle: "Add Product",
+        path: "/admin/add-product",
+        editing: false,
+        product: {},
+        errors: [],
+    });
+};
+
+export const postAddProduct = async (req, res, next) => {
+    try {
+        if (res.locals.validationErrors) {
+            return res.status(422).render("admin/edit-product", {
+                pageTitle: "Add Product",
+                path: "/admin/add-product",
+                editing: false,
+                product: req.body,
+                errors: res.locals.validationErrors,
+            });
+        }
+
+        const title = req.body.title;
+        const price = req.body.price;
+        const description = req.body.description;
+
+        const product = new Product({
+            title,
+            price,
+            description,
+            userId: req.user,
+        });
+        await product.save();
+        res.redirect("/admin/products");
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 export const getEditProduct = async (req, res, next) => {
     try {
         const prodId = req.params.productId;
@@ -51,6 +64,7 @@ export const getEditProduct = async (req, res, next) => {
             path: "/admin/edit-product",
             editing: true,
             product,
+            errors: [],
         });
     } catch (err) {
         console.log(err);
@@ -59,6 +73,16 @@ export const getEditProduct = async (req, res, next) => {
 
 export const postEditProduct = async (req, res, next) => {
     try {
+        if (res.locals.validationErrors) {
+            return res.status(422).render("admin/edit-product", {
+                pageTitle: "Edit Product",
+                path: "/admin/edit-product",
+                editing: true,
+                product: req.body,
+                errors: res.locals.validationErrors,
+            });
+        }
+
         const prodId = req.params.productId;
         const title = req.body.title;
         const price = req.body.price;
@@ -68,12 +92,10 @@ export const postEditProduct = async (req, res, next) => {
             _id: prodId,
             userId: req.user,
         });
-        if (product) {
-            product.title = title;
-            product.price = price;
-            product.description = description;
-            await product.save();
-        }
+        product.title = title;
+        product.price = price;
+        product.description = description;
+        await product.save();
         res.redirect("/admin/products");
     } catch (err) {
         console.log(err);
