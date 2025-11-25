@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Product } from "../../models/mongoose/product.js";
 
 export const getAdminProducts = async (req, res, next) => {
@@ -12,7 +13,8 @@ export const getAdminProducts = async (req, res, next) => {
             products,
         });
     } catch (err) {
-        console.log(err);
+        console.log('Error: getAdminProducts');
+        next(err);
     }
 };
 
@@ -51,7 +53,8 @@ export const postAddProduct = async (req, res, next) => {
         await product.save();
         res.redirect("/admin/products");
     } catch (err) {
-        console.log(err);
+        console.log('Error: postAddProduct');
+        next(err);
     }
 };
 
@@ -67,7 +70,8 @@ export const getEditProduct = async (req, res, next) => {
             errors: [],
         });
     } catch (err) {
-        console.log(err);
+        console.log('Error: getEditProduct');
+        next(err);
     }
 };
 
@@ -98,7 +102,8 @@ export const postEditProduct = async (req, res, next) => {
         await product.save();
         res.redirect("/admin/products");
     } catch (err) {
-        console.log(err);
+        console.log('Error: postEditProduct');
+        next(err);
     }
 };
 
@@ -108,7 +113,8 @@ export const postDeleteProduct = async (req, res, next) => {
         await Product.deleteOne({ _id: productId, userId: req.user });
         res.redirect("/admin/products");
     } catch (err) {
-        console.log(err);
+        console.log('Error: postDeleteProduct');
+        next(err);
     }
 };
 
@@ -123,7 +129,8 @@ export const getProduct = async (req, res, next) => {
             product,
         });
     } catch (err) {
-        console.log(err);
+        console.log('Error: getProduct');
+        next(err);
     }
 };
 
@@ -137,7 +144,8 @@ export const getIndex = async (req, res, next) => {
             isAuthenticated: req.session.isLoggedIn,
         });
     } catch (err) {
-        console.log(err);
+        console.log('Error: getIndex');
+        next(err);
     }
 };
 
@@ -151,6 +159,7 @@ export const getProducts = async (req, res, next) => {
             isAuthenticated: req.session.isLoggedIn,
         });
     } catch (err) {
-        console.log(err);
+        console.log('Error: getProducts');
+        next(err);
     }
 };

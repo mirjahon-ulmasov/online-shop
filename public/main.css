@@ -13,6 +13,13 @@
     color: #ccc;
 }
 
+.error-msg {
+    color: #555;
+    font-size: 18px;
+    margin-top: 1rem;
+    text-align: center;
+}
+
 .navigation {
     height: 3rem;
     display: flex;

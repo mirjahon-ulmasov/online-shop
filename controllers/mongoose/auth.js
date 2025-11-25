@@ -32,7 +32,8 @@ export const postLogin = async (req, res, next) => {
             res.redirect("/");
         });
     } catch (err) {
-        console.log(err);
+        console.error("Login Error");
+        next(err);
     }
 };
 
@@ -81,7 +82,7 @@ export const postSignup = async (req, res, next) => {
             "<h2>Welcome!</h2><p>Thank you for signing up. Your account has been successfully created.</p><p>You can now log in and start using our service.</p>"
         );
     } catch (err) {
-        console.error("Signup Error:", err);
+        console.error("Signup Error");
         next(err);
     }
 };
@@ -116,7 +117,8 @@ export const postResetPassword = async (req, res, next) => {
             `<p>Please click to this <a href='http://localhost:3000/reset/${token}'>link</a> to reset your password</p>`
         );
     } catch (err) {
-        console.log(err);
+        console.error("Reset Password Error");
+        next(err);
     }
 };
 
@@ -167,6 +169,7 @@ export const postNewPassword = async (req, res, next) => {
         req.flash("success", "Your password successfully changed");
         res.redirect("/login");
     } catch (err) {
-        console.log(err);
+        console.error("New Password Error");
+        next(err);
     }
 };

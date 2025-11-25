@@ -14,7 +14,7 @@ import flash from "connect-flash";
 import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
 import authRoutes from "./routes/auth.js";
-import { getNotFound } from "./controllers/error.js";
+import { getNotFound, getServerError } from "./controllers/error.js";
 import { User } from "./models/mongoose/user.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -53,6 +53,19 @@ app.use(
     })
 );
 
+app.use(csrfSynchronisedProtection);
+app.use(flash());
+
+app.use((req, res, next) => {
+    // These get added in each ejs files
+    res.locals.csrfToken = generateToken(req);
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+    next();
+});
+
 app.use(async (req, res, next) => {
     try {
         if (req.session.user) {
@@ -63,25 +76,8 @@ app.use(async (req, res, next) => {
         }
         next();
     } catch (err) {
-        console.log(err);
         next(err);
     }
-});
-
-app.use(csrfSynchronisedProtection);
-app.use(flash());
-
-app.use((req, res, next) => {
-    // These get added in each ejs files
-    res.locals.csrfToken = generateToken(req);
-    res.locals.isAuthenticated = req.session.isLoggedIn;
-    next();
-});
-
-app.use((req, res, next) => {
-    res.locals.error = req.flash("error");
-    res.locals.success = req.flash("success");
-    next();
 });
 
 app.use("/admin", adminRoutes);
@@ -89,6 +85,13 @@ app.use(authRoutes);
 app.use(shopRoutes);
 
 app.use(getNotFound);
+
+app.use((err, req, res, next) => {
+    res.status(500).render("500", {
+        pageTitle: "Error!",
+        path: "/500",
+    });
+});
 
 async function createServer() {
     try {

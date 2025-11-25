@@ -7,7 +7,8 @@ export const postCart = async (req, res, next) => {
         await req.user.addToCart(product);
         res.redirect("/cart");
     } catch (err) {
-        console.log(err);
+        console.log('Error: postCart');
+        next(err);
     }
 };
 
@@ -27,7 +28,8 @@ export const getCart = async (req, res, next) => {
             balance,
         });
     } catch (err) {
-        console.log(err);
+        console.log('Error: getCart');
+        next(err);
     }
 };
 
@@ -37,6 +39,7 @@ export const deleteCart = async (req, res, next) => {
         await req.user.removeFromCart(productId);
         res.redirect("/cart");
     } catch (err) {
-        console.log(err);
+        console.log('Error: deleteCart');
+        next(err);
     }
 };
