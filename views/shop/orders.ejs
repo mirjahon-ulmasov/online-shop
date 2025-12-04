@@ -11,6 +11,7 @@
                             <a href="/orders/<%= order._id %>">
                                 ID: <%= order._id %>
                             </a>
+                            <a class="btn" href="/invoice/<%= order._id %>">Save Invoice</a>
                             <ul class="order-product">
                                 <% for(let product of order.products) { %>
                                     <li>

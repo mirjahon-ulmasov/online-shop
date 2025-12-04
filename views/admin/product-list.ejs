@@ -8,6 +8,7 @@
                     <li class="admin">
                         <h2 class="title"><%= product.title %></h2>
                         <p class="price"><%= product.price %>$</p>
+                        <img src="<%= product.image %>" alt="Product Image">
                         <p class="description"><%= product.description %></p>
                         <div class="actions">
                             <a href="/admin/edit-product/<%= product._id %>?editing=true">Edit</a>

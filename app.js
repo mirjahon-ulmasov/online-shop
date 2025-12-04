@@ -10,6 +10,8 @@ import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
 import { csrfSync } from "csrf-sync";
 import flash from "connect-flash";
+import multer from "multer";
+import fs from "fs";
 
 import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
@@ -31,13 +33,43 @@ const { generateToken, csrfSynchronisedProtection } = csrfSync({
     getTokenFromRequest: (req) => req.body["_csrf"],
 });
 
+const uploadDir = "uploads";
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const ext = path.extname(file.originalname);
+        cb(null, unique + ext);
+    },
+});
+
+const fileFilter = (req, file, cb) => {
+    const allowed = ["image/jpeg", "image/jpg", "image/png"];
+    if (allowed.includes(file.mimetype)) {
+        cb(null, true); // accept file
+    } else {
+        cb(null, false); // reject file (NOT save)
+    }
+};
+
+const upload = multer({ storage, fileFilter });
+
 const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", "views");
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/uploads', express.static(path.join(__dirname, "uploads")));
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(upload.single("image"));
 
 app.use(
     session({

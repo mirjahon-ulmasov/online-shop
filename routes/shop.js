@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { getCart, postCart, deleteCart } from "../controllers/mongoose/cart.js";
-import { getOrders, getOrder, postAddOrder } from "../controllers/mongoose/order.js";
+import { getOrders, getOrder, getInvoice, postAddOrder } from "../controllers/mongoose/order.js";
 import { getIndex, getProducts, getProduct } from "../controllers/mongoose/product.js";
 import { isAuth } from "../middlewares/is-auth.js";
 
@@ -22,6 +22,8 @@ router.post('/delete-cart', isAuth, deleteCart)
 router.get("/orders", isAuth, getOrders);
 
 router.get("/orders/:orderId", isAuth, getOrder);
+
+router.get("/invoice/:orderId", isAuth, getInvoice);
 
 router.post("/order", isAuth, postAddOrder);
 

@@ -17,3 +17,13 @@
     border: 1px solid #ddd;
     margin-top: 1rem;
 }
+
+.btn {
+    text-decoration: none;
+    background: #7575ff;
+    color: white;
+    padding: 6px 8px;
+    font-size: 16px;
+    border-radius: 2px;
+    margin-left: 1rem;
+}

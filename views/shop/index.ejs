@@ -9,6 +9,7 @@
                         <h2 class="title"><%= product.title %></h2>
                         <p class="price"><%= product.price %>$</p>
                         <p class="description"><%= product.description %></p>
+                        <img src="<%= product.image %>" alt="Product Image">
                         <div class="actions">
                             <%- include('../includes/add-to-cart.ejs') %>
                         </div>

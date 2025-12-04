@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
 import { Product } from "../../models/mongoose/product.js";
+import { deleteFile } from "../../utils/file.js";
 
 export const getAdminProducts = async (req, res, next) => {
     try {
@@ -43,12 +43,24 @@ export const postAddProduct = async (req, res, next) => {
         const title = req.body.title;
         const price = req.body.price;
         const description = req.body.description;
-
+        const image = req.file
+        
+        if(!image) {
+            return res.status(422).render("admin/edit-product", {
+                pageTitle: "Add Product",
+                path: "/admin/add-product",
+                editing: false,
+                product: req.body,
+                errors: [{ msg: 'Please select files with types: jpeg, jpg, png' }],
+            }); 
+        }
+        
         const product = new Product({
             title,
             price,
             description,
             userId: req.user,
+            image: '/' + image.path
         });
         await product.save();
         res.redirect("/admin/products");
@@ -91,6 +103,7 @@ export const postEditProduct = async (req, res, next) => {
         const title = req.body.title;
         const price = req.body.price;
         const description = req.body.description;
+        const image = req.file
 
         const product = await Product.findOne({
             _id: prodId,
@@ -99,6 +112,12 @@ export const postEditProduct = async (req, res, next) => {
         product.title = title;
         product.price = price;
         product.description = description;
+
+        if (image) {
+            deleteFile(product.image.slice(1)) // remove '/'
+            product.image = '/' + image.path
+        }
+
         await product.save();
         res.redirect("/admin/products");
     } catch (err) {
@@ -110,7 +129,11 @@ export const postEditProduct = async (req, res, next) => {
 export const postDeleteProduct = async (req, res, next) => {
     try {
         const productId = req.params.productId;
-        await Product.deleteOne({ _id: productId, userId: req.user });
+        const product = await Product.findById(productId)
+        if (product) {
+            deleteFile(product.image.slice(1)) // remove '/'
+            await Product.deleteOne({ _id: productId, userId: req.user });
+        }
         res.redirect("/admin/products");
     } catch (err) {
         console.log('Error: postDeleteProduct');

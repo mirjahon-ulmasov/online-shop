@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="/form.css">
 </head>
 <%- include('../includes/body.ejs') %>
-        <form class="form" action="<%= editing ? '/admin/edit-product/' + product._id : '/admin/add-product' %>" method="POST">
+        <form class="form" action="<%= editing ? '/admin/edit-product/' + product._id : '/admin/add-product' %>" method="POST" enctype="multipart/form-data">
             <input 
                 type="text" 
                 name="title" 
@@ -18,6 +18,7 @@
                 value="<%= product?.price %>" 
                 class="<%= errors.some(error => error.path == 'price') ? 'invalid' : '' %>"
             >
+            <input type="file" name="image">
             <textarea 
                 rows="4" 
                 name="description" 
